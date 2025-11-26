@@ -62,7 +62,6 @@ export class AccommodationService {
 
     // Boolean filters
     if (filters.isAvailable !== undefined) {
-      console.log('filters.isAvailable', filters.isAvailable);
       query.isAvailable = filters.isAvailable;
     }
 
