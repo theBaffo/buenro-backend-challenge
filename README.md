@@ -85,6 +85,8 @@ The application will:
 
 ## API Endpoints
 
+**Note**: inside the [postman](postman) folder you can find a Postman collection file which can help you test the API easily.
+
 ### GET /accommodations
 
 Retrieve accommodations with flexible filtering options.
@@ -111,12 +113,6 @@ curl http://localhost:3000/accommodations
 
 # Filter by city and price range
 curl "http://localhost:3000/accommodations?city=Paris&pricePerNightMin=200&pricePerNightMax=500"
-
-# Filter by availability and source
-curl "http://localhost:3000/accommodations?isAvailable=true&source=source1"
-
-# Search by name with pagination
-curl "http://localhost:3000/accommodations?name=hotel&page=1&limit=20"
 ```
 
 **Response Format:**

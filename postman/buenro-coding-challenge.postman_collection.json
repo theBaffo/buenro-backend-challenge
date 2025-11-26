@@ -1,0 +1,48 @@
+{
+	"info": {
+		"_postman_id": "65b9ad2b-c981-40c0-bfb2-a45540800901",
+		"name": "Buenro - Coding Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25644615"
+	},
+	"item": [
+		{
+			"name": "/ingestion/trigger",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/ingestion/trigger",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"ingestion",
+						"trigger"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/accommodations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/accommodations/",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"accommodations",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
