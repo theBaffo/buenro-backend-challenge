@@ -29,7 +29,7 @@ export class Accommodation {
   @Prop()
   priceSegment?: string;
 
-   // Store original data for debugging/extensibility
+  // Store original data for debugging/extensibility
   @Prop({ type: Object })
   rawData?: Record<string, unknown>;
 }
