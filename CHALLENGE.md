@@ -23,7 +23,7 @@ https://buenro-tech-assessment-materials.s3.eu-north-1.amazonaws.com/structured_
 
 ```json
 [
-// ...
+    // ...
     {
         id: string, // some random numeric var with 6 digits,
         name: string, // "Any human readable property name",
@@ -34,7 +34,7 @@ https://buenro-tech-assessment-materials.s3.eu-north-1.amazonaws.com/structured_
         isAvailable: boolean,
         priceForNight: number // any digit between 100 and 1000
     }
-// ...
+    // ...
 ]
 ```
 
@@ -43,7 +43,7 @@ https://buenro-tech-assessment-materials.s3.eu-north-1.amazonaws.com/large_gener
 
 ```json
 [
-...
+    // ...
     {
         id: string, // "some string random generated name 8 unique characters",
         city: string, // "Some random city name"
@@ -51,7 +51,7 @@ https://buenro-tech-assessment-materials.s3.eu-north-1.amazonaws.com/large_gener
         priceSegment: string, // "random generated one of: high/medium/low"
         pricePerNight: number, // any digit between 100 and 1000
     }
-...
+    // ...
 ]
 ```
 
