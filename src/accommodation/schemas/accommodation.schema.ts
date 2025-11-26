@@ -27,11 +27,11 @@ export class Accommodation {
   isAvailable?: boolean;
 
   @Prop()
-  priceSegment?: string; // Only if provided by source, not calculated
+  priceSegment?: string;
 
-  // Additional metadata
+   // Store original data for debugging/extensibility
   @Prop({ type: Object })
-  rawData?: Record<string, unknown>; // Store original data for debugging/extensibility
+  rawData?: Record<string, unknown>;
 }
 
 export const AccommodationSchema = SchemaFactory.createForClass(Accommodation);
