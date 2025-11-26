@@ -13,6 +13,7 @@ export abstract class BaseExtractor implements AccommodationExtractor {
     if (typeof value === 'string') {
       return value;
     }
+
     return undefined;
   }
 
@@ -23,6 +24,7 @@ export abstract class BaseExtractor implements AccommodationExtractor {
     if (typeof value === 'number' && !isNaN(value)) {
       return value;
     }
+
     return undefined;
   }
 
@@ -33,6 +35,7 @@ export abstract class BaseExtractor implements AccommodationExtractor {
     if (typeof value === 'boolean') {
       return value;
     }
+
     return undefined;
   }
 
