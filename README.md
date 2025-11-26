@@ -1,6 +1,6 @@
 # Buenro Backend Challenge - Accommodation Data Ingestion System
 
-A NestJS-based backend solution for ingesting accommodation data from multiple external JSON sources stored in AWS S3, storing them in MongoDB, and exposing a flexible filtering API.
+A NestJS-based backend solution for ingesting accommodation data from multiple external JSON sources stored in AWS S3, storing them in MongoDB, and exposing them through an API endpoint with filtering capabilities.
 
 ## Architecture Overview
 
@@ -9,6 +9,7 @@ The solution is built with a modular, extensible architecture:
 - **Accommodation Module**: Core module handling all accommodation-related functionality
 - **Abstract Extraction Pattern**: Base extractor class allows easy addition of new data sources
 - **Scheduled Ingestion**: Automatic data ingestion at regular intervals
+- **Manual Ingestion**: Ability to invoke a manual ingestion through an API call
 - **Unified Data Model**: Single schema that accommodates data from different sources
 - **Flexible Filtering**: API supports filtering on any attribute with partial text matching and numeric ranges
 
@@ -17,7 +18,6 @@ The solution is built with a modular, extensible architecture:
 - **TypeScript**: Type-safe development
 - **NestJS**: Progressive Node.js framework
 - **MongoDB**: Document database with Mongoose ODM
-- **AWS SDK**: S3 client for fetching JSON files
 - **Class Validator**: Request validation
 - **NestJS Schedule**: Cron-based scheduled tasks
 
@@ -26,14 +26,12 @@ The solution is built with a modular, extensible architecture:
 ### Prerequisites
 
 - Node.js (v18 or higher)
-- Docker and Docker Compose (optional, for easy MongoDB setup)
-- MongoDB (running locally or connection string) - or use Docker Compose
+- Docker and Docker Compose (for easy MongoDB setup, alternatively is possible to use a local MongoDB instance)
 - npm or yarn
 
 ### Installation
 
 ```bash
-# Install dependencies
 npm install
 ```
 
@@ -42,14 +40,14 @@ npm install
 The easiest way to get started is using Docker Compose to run MongoDB:
 
 ```bash
-# Start MongoDB using Docker Compose
-docker-compose up -d
-
 # Copy the example environment file
 cp .env.example .env
 
-# The .env file is already configured to work with the docker-compose MongoDB setup
+# Start MongoDB
+docker-compose up -d
+
 ```
+
 
 This will start a MongoDB container with:
 - Username: `admin`
@@ -78,16 +76,12 @@ npm run start:dev
 # Production mode
 npm run build
 npm run start:prod
-
-# Standard start
-npm run start
 ```
 
 The application will:
 1. Connect to MongoDB
 2. Start the HTTP server (default: http://localhost:3000)
-3. Automatically run ingestion on startup (via scheduled task)
-4. Continue ingesting data every hour (configurable via `INGESTION_CRON`)
+3. Automatically run ingestion every hour (configurable via `INGESTION_CRON`)
 
 ## API Endpoints
 
@@ -100,7 +94,7 @@ Retrieve accommodations with flexible filtering options.
 - `sourceId` (string): Filter by exact source ID
 - `source` (string): Filter by source name (e.g., 'source1', 'source2')
 - `name` (string): Partial text match on accommodation name (case-insensitive)
-- `city` (string): Partial text match on city (checks both `city` and `address.city` fields)
+- `city` (string): Partial text match on city (case-insensitive)
 - `country` (string): Partial text match on country (case-insensitive)
 - `pricePerNightMin` (number): Minimum price per night
 - `pricePerNightMax` (number): Maximum price per night
@@ -186,11 +180,6 @@ On error:
 }
 ```
 
-**Note:** This endpoint triggers the same ingestion process that runs automatically on schedule. It's useful for:
-- Testing the ingestion process
-- Manually refreshing data without waiting for the scheduled run
-- Debugging ingestion issues
-
 ## Data Model
 
 The unified `Accommodation` schema includes:
@@ -199,10 +188,10 @@ The unified `Accommodation` schema includes:
 - `source`: Source identifier ('source1' or 'source2')
 - `name`: Accommodation name (optional)
 - `address`: Object with `country` and `city` (optional)
-- `city`: Direct city field (for sources that provide it)
-- `pricePerNight`: Price per night (required, standardized field)
+- `city`: city of the accomodation (optional)
+- `country`: country of the accomodation (optional)
+- `pricePerNight`: Price per night (optional)
 - `isAvailable`: Availability boolean (source1)
-- `availability`: Availability boolean (source2)
 - `priceSegment`: Price segment if provided by source (not calculated)
 - `rawData`: Original data from source for debugging/extensibility
 
@@ -251,16 +240,13 @@ export class Source3Extractor extends BaseExtractor {
     // Validate required fields
     return (
       typeof obj.id === 'string' &&
-      obj.id.length > 0 &&
-      typeof obj.price === 'number' &&
-      !isNaN(obj.price)
+      obj.id.length > 0
     );
   }
 
   private transformItem(item: Source3RawData): Accommodation {
     const accommodation = this.createAccommodation(
       item.id,
-      item.price!, // Map to pricePerNight
       item as unknown as Record<string, unknown>,
     );
 
@@ -317,7 +303,7 @@ That's it! The new source will be automatically ingested on the next scheduled r
 
 1. **Extend BaseExtractor**: All extractors extend `BaseExtractor` which provides helper methods and enforces the `sourceName` property.
 
-2. **Map to Unified Schema**: Transform source-specific data to the unified `Accommodation` schema, using `pricePerNight` as the standardized price field.
+2. **Map to Unified Schema**: Transform source-specific data to the unified `Accommodation` schema.
 
 3. **Don't Calculate Fields**: Only include fields that exist in the source data. For example, don't calculate `priceSegment` if it's not provided.
 
@@ -327,9 +313,7 @@ That's it! The new source will be automatically ingested on the next scheduled r
 
 ## Performance Considerations
 
-1. **Streaming**: S3 service uses streaming to handle large files (up to 1GB) efficiently.
-
-2. **Bulk Operations**: Ingestion uses MongoDB `bulkWrite` with upsert for efficient database operations.
+1. **Bulk Operations**: Ingestion uses MongoDB `bulkWrite` with upsert for efficient database operations.
 
 3. **Indexing**: Strategic indexes on frequently queried fields and compound indexes for common query patterns.
 
@@ -348,31 +332,6 @@ npm run test:e2e
 
 # Test coverage
 npm run test:cov
-```
-
-## Project Structure
-
-```
-src/
-├── accommodation/
-│   ├── schemas/
-│   │   └── accommodation.schema.ts      # Unified MongoDB schema
-│   ├── dto/
-│   │   └── filter-accommodation.dto.ts   # API filter DTO
-│   ├── extractors/
-│   │   ├── base-extractor.ts            # Abstract base class
-│   │   ├── source1-extractor.ts         # Source 1 implementation
-│   │   └── source2-extractor.ts         # Source 2 implementation
-│   ├── interfaces/
-│   │   └── accommodation-extractor.interface.ts
-│   ├── accommodation.controller.ts      # API controller
-│   ├── accommodation.service.ts         # Business logic
-│   ├── accommodation.module.ts          # Module definition
-│   ├── ingestion.service.ts             # Data ingestion logic
-│   ├── ingestion.task.ts               # Scheduled task
-│   └── s3.service.ts                    # S3 file fetching
-├── app.module.ts                        # Root module
-└── main.ts                              # Application entry point
 ```
 
 ## Notes
