@@ -313,7 +313,9 @@ That's it! The new source will be automatically ingested on the next scheduled r
 
 ## Performance Considerations
 
-1. **Bulk Operations**: Ingestion uses MongoDB `bulkWrite` with upsert for efficient database operations.
+1. **Streaming Downloads**: The downloader service uses streaming to fetch and parse large JSON files efficiently. Instead of loading entire files into memory, data is processed incrementally as it arrives, making it suitable for handling very large files (150MB+) without memory issues.
+
+2. **Bulk Operations**: Ingestion uses MongoDB `bulkWrite` with upsert for efficient database operations.
 
 3. **Indexing**: Strategic indexes on frequently queried fields and compound indexes for common query patterns.
 
@@ -336,7 +338,7 @@ npm run test:cov
 
 ## Notes
 
-- The system handles both small (200KB) and large (150MB+) JSON files efficiently.
+- The system handles both small and large JSON files efficiently using streaming downloads that process data incrementally without loading entire files into memory.
 - Data is upserted based on `(source, sourceId)` to prevent duplicates while allowing updates.
 - The ingestion task runs automatically every hour but can be triggered manually or configured via environment variables.
 - All source data is preserved in the `rawData` field for debugging and future extensibility.
