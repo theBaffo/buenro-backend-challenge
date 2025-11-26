@@ -37,19 +37,17 @@ export class Source2Extractor extends BaseExtractor {
     );
 
     if (item.pricePerNight !== undefined) {
-      accommodation.pricePerNight = item.pricePerNight;
+      accommodation.pricePerNight = this.getNumber(item.pricePerNight);
     }
 
     if (item.city) {
       accommodation.city = this.getString(item.city);
     }
 
-    // Map availability to isAvailable (unified field)
     if (item.availability !== undefined) {
       accommodation.isAvailable = this.getBoolean(item.availability);
     }
 
-    // Only include priceSegment if provided by source (not calculated)
     if (item.priceSegment) {
       accommodation.priceSegment = this.getString(item.priceSegment);
     }

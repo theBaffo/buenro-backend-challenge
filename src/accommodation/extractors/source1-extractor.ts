@@ -42,7 +42,7 @@ export class Source1Extractor extends BaseExtractor {
     );
 
     if (item.priceForNight !== undefined) {
-      accommodation.pricePerNight = item.priceForNight;
+      accommodation.pricePerNight = this.getNumber(item.priceForNight);
     }
 
     if (item.name) {
