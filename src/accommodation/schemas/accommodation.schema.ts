@@ -26,7 +26,7 @@ export class Accommodation {
   @Prop({ index: true })
   isAvailable?: boolean;
 
-  @Prop()
+  @Prop({ index: true })
   priceSegment?: string;
 
   // Store original data for debugging/extensibility
@@ -37,6 +37,5 @@ export class Accommodation {
 export const AccommodationSchema = SchemaFactory.createForClass(Accommodation);
 
 // Create compound indexes for common query patterns
-AccommodationSchema.index({ city: 1, pricePerNight: 1 });
-AccommodationSchema.index({ country: 1, city: 1 });
 AccommodationSchema.index({ source: 1, sourceId: 1 }, { unique: true });
+AccommodationSchema.index({ city: 1, pricePerNight: 1, isAvailable: 1 });
