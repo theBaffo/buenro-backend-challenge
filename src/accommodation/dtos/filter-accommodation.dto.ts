@@ -43,7 +43,7 @@ export class FilterAccommodationDto {
 
   @IsOptional()
   @Type(() => String)
-  @Transform(({ value }) => value === 'true')
+  @Transform(({ value }) => (value ? value === 'true' : undefined))
   @IsBoolean()
   isAvailable?: boolean;
 
