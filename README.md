@@ -22,9 +22,12 @@ cp .env.example .env
 ### Running the Application
 
 ```bash
+# Install dependencies
+npm install
+
 # Start MongoDB
 # Alternatively, use yourr local MongoDB instance
-docker-compose up -d
+docker compose up -d
 
 # Development mode (with hot reload)
 npm run start:dev
