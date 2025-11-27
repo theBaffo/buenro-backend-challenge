@@ -31,14 +31,60 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/accommodations/",
+					"raw": "localhost:3000/accommodations?sourceId=272805&source=source1&name=Lakeview House&city=Fortaleza&country=Brazil&pricePerNightMin=400&pricePerNightMax=600&isAvailable=true&page=1&limit=10",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"accommodations",
-						""
+						"accommodations"
+					],
+					"query": [
+						{
+							"key": "sourceId",
+							"value": "272805"
+						},
+						{
+							"key": "source",
+							"value": "source1"
+						},
+						{
+							"key": "name",
+							"value": "Lakeview House"
+						},
+						{
+							"key": "city",
+							"value": "Fortaleza"
+						},
+						{
+							"key": "country",
+							"value": "Brazil"
+						},
+						{
+							"key": "pricePerNightMin",
+							"value": "400"
+						},
+						{
+							"key": "pricePerNightMax",
+							"value": "600"
+						},
+						{
+							"key": "isAvailable",
+							"value": "true"
+						},
+						{
+							"key": "priceSegment",
+							"value": "low",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						}
 					]
 				}
 			},
