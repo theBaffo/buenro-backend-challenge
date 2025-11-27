@@ -10,6 +10,7 @@ export class IngestionController {
   async triggerIngestion() {
     try {
       await this.ingestionService.ingestAll();
+
       return {
         success: true,
         message: 'Ingestion completed successfully',

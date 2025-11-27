@@ -6,11 +6,11 @@ import {
   AccommodationDocument,
 } from '../schemas/accommodation.schema';
 import { DownloaderService } from './downloader.service';
-import { AccommodationExtractor } from '../interfaces/accommodation-extractor.interface';
+import { BaseExtractor } from '../extractors/base-extractor';
 
 interface DataSource {
   url: string;
-  extractor: AccommodationExtractor;
+  extractor: BaseExtractor;
   sourceName: string;
 }
 

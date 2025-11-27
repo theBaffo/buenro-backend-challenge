@@ -1,7 +1,6 @@
 import { Accommodation } from '../schemas/accommodation.schema';
-import { AccommodationExtractor } from '../interfaces/accommodation-extractor.interface';
 
-export abstract class BaseExtractor implements AccommodationExtractor {
+export abstract class BaseExtractor {
   protected abstract readonly sourceName: string;
 
   abstract extract(rawData: unknown[]): Accommodation[];
